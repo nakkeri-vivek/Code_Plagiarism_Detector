@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+numpy
+scikit-learn
+pygments
+jinja2
+

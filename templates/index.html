@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CodeShield - Plagiarism Checker</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header__inner">
+        <div>
+          <div class="brand">CodeShield</div>
+          <div class="subtitle">AI-powered code plagiarism detection (token + AST TF‑IDF)</div>
+        </div>
+        <div class="header__right">
+          <div class="pill" id="baselineCountPill">Baselines: 0</div>
+          <a class="link" href="/docs" target="_blank" rel="noreferrer">API Docs</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <div class="card__title">1) Add baseline (reference solution)</div>
+        <div class="grid">
+          <div>
+            <label class="label" for="baselineLabel">Label (optional)</label>
+            <input id="baselineLabel" class="input" placeholder="e.g., assignment_1_solution" />
+          </div>
+          <div>
+            <label class="label" for="baselineLanguage">Language</label>
+            <select id="baselineLanguage" class="input">
+              <option value="Select Language">Select Language</option>
+              <option value="python" selected>Python</option>
+              <option value="java">Java</option>
+              <option value="javascript">JavaScript</option>
+              <option value="typescript">TypeScript</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+              <option value="csharp">C#</option>
+              <option value="go">Go</option>
+              <option value="rust">Rust</option>
+              <option value="php">PHP</option>
+              <option value="ruby">Ruby</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid--2">
+          <div>
+            <label class="label" for="baselineFile">Upload files (0–many)</label>
+            <input
+              id="baselineFile"
+              class="input"
+              type="file"
+              multiple
+              accept=".py,.txt,.js,.java,.cpp,.c,.ts"
+            />
+            <div class="hint">
+              Each selected file becomes one baseline. If no file is selected, the text
+              area on the right is used.
+            </div>
+          </div>
+          <div>
+            <label class="label" for="baselineCode">Or paste code</label>
+            <textarea id="baselineCode" class="textarea" placeholder="Paste baseline code here..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn--primary" id="addBaselineBtn">Add baseline</button>
+          <button class="btn btn--ghost" id="resetBaselinesBtn">Reset baselines (memory)</button>
+          <div class="status" id="baselineStatus"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card__title">2) Check a student submission</div>
+        <div class="grid">
+          <div>
+            <label class="label" for="studentId">Student ID (optional)</label>
+            <input id="studentId" class="input" placeholder="e.g., student_001" />
+          </div>
+          <div>
+            <label class="label" for="studentLanguage">Language</label>
+            <select id="studentLanguage" class="input">
+              <option value="Select Language">Select Language</option>
+              <option value="python" selected>Python</option>
+              <option value="java">Java</option>
+              <option value="javascript">JavaScript</option>
+              <option value="typescript">TypeScript</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+              <option value="csharp">C#</option>
+              <option value="go">Go</option>
+              <option value="rust">Rust</option>
+              <option value="php">PHP</option>
+              <option value="ruby">Ruby</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid--2">
+          <div>
+            <label class="label" for="topK">Top-K matches</label>
+            <input id="topK" class="input" type="number" min="1" max="50" value="5" />
+          </div>
+          <div></div>
+        </div>
+
+        <div class="grid grid--2">
+          <div>
+            <label class="label" for="studentFile">Upload file (optional)</label>
+            <input id="studentFile" class="input" type="file" accept=".py,.txt,.js,.java,.cpp,.c,.ts" />
+            <div class="hint">If a file is selected, it will be used instead of the text area.</div>
+          </div>
+          <div>
+            <label class="label" for="studentCode">Or paste code</label>
+            <textarea id="studentCode" class="textarea" placeholder="Paste student code here..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn--primary" id="checkBtn">Check similarity</button>
+          <div class="status" id="checkStatus"></div>
+        </div>
+
+        <div class="results" id="results">
+          <div class="results__title">Results</div>
+          <div class="results__empty" id="resultsEmpty">No results yet.</div>
+          <div class="tableWrap" id="resultsTableWrap" hidden>
+            <table class="table" id="resultsTable">
+              <thead>
+                <tr>
+                  <th>Baseline ID</th>
+                  <th>Label</th>
+                  <th>Similarity</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+          </div>
+          <details class="raw" id="rawDetails" hidden>
+            <summary>Raw response</summary>
+            <pre id="rawJson"></pre>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <span>Tip: Add multiple baselines for better detection.</span>
+        <span>API: <code>/baseline</code>, <code>/submit-code</code>, <code>/status</code></span>
+      </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+
