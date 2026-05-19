@@ -2,6 +2,8 @@
 Entry point for the FastAPI application.
 """
 
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -11,10 +13,11 @@ from fastapi.templating import Jinja2Templates
 from app.database import init_db
 from app.routes import router as api_router
 
+BASE_DIR = Path(__file__).resolve().parent
 app = FastAPI(title="Code Plagiarism Detection API")
 
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 
 @app.get("/")
